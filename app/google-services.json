@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "545205634519",
+    "firebase_url": "https://collegebus-track.firebaseio.com",
+    "project_id": "collegebus-track",
+    "storage_bucket": "collegebus-track.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545205634519:android:690efd1e9177943e",
+        "android_client_info": {
+          "package_name": "com.manik.collegebus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "545205634519-k2akoa1qbnc7av2o4r1h2595h6ikg3f7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manik.collegebus",
+            "certificate_hash": "64e6227b1f729825c9e0e1b6afaa18c6304dd348"
+          }
+        },
+        {
+          "client_id": "545205634519-pruqd88ak225lroqs83tp3c1qd83d930.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTiScRBI7ZT5R2iokL3CpjhSc-R7fFwmk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "545205634519-pruqd88ak225lroqs83tp3c1qd83d930.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
