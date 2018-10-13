@@ -50,6 +50,8 @@ public class MessageFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.remessage);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        messageAdap = new MessageAdap(getContext(),messageList);
+        recyclerView.setAdapter(messageAdap);
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("messages");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -60,10 +62,10 @@ public class MessageFragment extends Fragment {
                     UMessage uMessage = msgSnapshot.getValue(UMessage.class);
                     messageList.add(uMessage);
                 }
-                messageAdap = new MessageAdap(getContext(),messageList);
-                recyclerView.setAdapter(messageAdap);
 
-
+//                messageAdap.notifyDataSetChanged();
+                messageAdap.notifyDataSetChanged();
+                recyclerView.scrollToPosition(messageAdap.getItemCount()-1);
 
             }
 

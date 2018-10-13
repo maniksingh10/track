@@ -2,6 +2,7 @@ package com.manik.collegebus;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,19 +38,18 @@ public class MessageAdap extends RecyclerView.Adapter<MessageAdap.MessageHolder>
     @Override
     public void onBindViewHolder(@NonNull MessageHolder messageHolder, int i) {
         UMessage uMessage = messageList.get(i);
-        messageHolder.tv_msg.setText(uMessage.getMessage());
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) messageHolder.tv_msg.getLayoutParams();
 
         if (uMessage.getUsername().equals(firebaseAuth.getCurrentUser().getPhoneNumber())) {
-            messageHolder.tv_msg.setBackground(context.getResources().getDrawable(R.drawable.outgoing_msg));
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-            messageHolder.tv_msg.setLayoutParams(params);
-            messageHolder.tv_msg.setPadding(18,16,25,14);
+            messageHolder.tv_inmsg.setVisibility(View.GONE);
+            messageHolder.tv_outmsg.setVisibility(View.VISIBLE);
+            messageHolder.tv_outmsg.setBackground(context.getResources().getDrawable(R.drawable.outgoing_msg));
+            messageHolder.tv_outmsg.setText(uMessage.getMessage());
         } else {
-            messageHolder.tv_msg.setBackground(context.getResources().getDrawable(R.drawable.income_msg));
-            params.addRule(RelativeLayout.ALIGN_LEFT, RelativeLayout.TRUE);
-            messageHolder.tv_msg.setLayoutParams(params);
-            messageHolder.tv_msg.setPadding(25,16,18,14);
+            messageHolder.tv_outmsg.setVisibility(View.GONE);
+            messageHolder.tv_inmsg.setVisibility(View.VISIBLE);
+
+            messageHolder.tv_inmsg.setBackground(context.getResources().getDrawable(R.drawable.income_msg));
+            messageHolder.tv_inmsg.setText(uMessage.getMessage());
         }
     }
 
@@ -62,13 +62,15 @@ public class MessageAdap extends RecyclerView.Adapter<MessageAdap.MessageHolder>
 
     public class MessageHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_msg;
-        RelativeLayout layout;
+        TextView tv_inmsg;
+        TextView tv_outmsg;
+        ConstraintLayout layout;
 
         public MessageHolder(@NonNull View itemView) {
             super(itemView);
 
-            tv_msg = itemView.findViewById(R.id.whatmessage);
+            tv_inmsg = itemView.findViewById(R.id.incomingmsg);
+            tv_outmsg = itemView.findViewById(R.id.outgoingmsg);
             layout = itemView.findViewById(R.id.rl);
 
         }

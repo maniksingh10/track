@@ -13,6 +13,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="1dp"
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
         map:layout_constraintBottom_toTopOf="@+id/onoff"

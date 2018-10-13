@@ -5,14 +5,16 @@ public class UserInfo {
     private String name;
     private String course;
     private String mobile;
+    private String uID;
 
     public UserInfo(){
 
     }
-    public UserInfo(String name, String course, String mobile) {
+    public UserInfo(String name, String course, String mobile,String uID) {
         this.name = name;
         this.course = course;
         this.mobile = mobile;
+        this.uID = uID;
     }
 
     public String getName() {
@@ -25,5 +27,9 @@ public class UserInfo {
 
     public String getMobile() {
         return mobile;
+    }
+
+    public String getuID() {
+        return uID;
     }
 }

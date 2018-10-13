@@ -53,7 +53,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Switch aSwitch;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
 
-    private DatabaseReference msgdb;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
@@ -64,10 +63,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        msgdb = FirebaseDatabase.getInstance().getReference("msges");
+
         aSwitch = findViewById(R.id.onoff);
         databaseReference = FirebaseDatabase.getInstance().getReference("BusLocation");
-        msgdb = FirebaseDatabase.getInstance().getReference("msges");
+
         checkPermission();
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -108,6 +107,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         String key = databaseReference.push().getKey();
                         ULocation uLocation = new ULocation(location.getLatitude(), location.getLongitude(), currentDate);
                         databaseReference.child("locate").setValue(uLocation);
+                        mMap.clear();
                         mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Time was " + convertDate(location.getTime(), "dd/MM/yyyy hh:mm:ss")).icon(BitmapDescriptorFactory.fromResource(R.drawable.img)));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(14));

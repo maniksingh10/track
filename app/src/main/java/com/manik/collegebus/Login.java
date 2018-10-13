@@ -98,7 +98,7 @@ public class Login extends AppCompatActivity {
                 if(task.isSuccessful()){
 
                     String key = databaseReference.push().getKey();
-                    UserInfo userInfo = new UserInfo(name, couse,mobile);
+                    UserInfo userInfo = new UserInfo(name, couse,mobile,firebaseAuth.getUid());
                     databaseReference.child("+91"+mobile).setValue(userInfo);
                     alertDialog.dismiss();
                     Intent intent = new Intent(Login.this, MainActivity.class);

@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "545205634519-g9fcr1ffjkr96lasphdnr3ug8f9ar6q6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manik.collegebus",
+            "certificate_hash": "3ecdcb01016dfee5bad74304ae1aa7cc6e08c7fe"
+          }
+        },
+        {
           "client_id": "545205634519-pruqd88ak225lroqs83tp3c1qd83d930.apps.googleusercontent.com",
           "client_type": 3
         }
