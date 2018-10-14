@@ -40,11 +40,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private DatabaseReference databaseReference;
     private double lat, logi;
-
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
 
-
-    private boolean isUpdateOn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +49,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("BusLocation");
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
     }
 
     @Override

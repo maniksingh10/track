@@ -55,7 +55,7 @@ public class Login extends AppCompatActivity {
         course_et = findViewById(R.id.course);
         mobile_et = findViewById(R.id.phone);
         send_bt = findViewById(R.id.sendcodebt);
-        root= findViewById(R.id.loginact);
+        root = findViewById(R.id.loginact);
         send_bt.setEnabled(false);
         mobile_et.addTextChangedListener(new TextWatcher() {
             @Override
@@ -65,8 +65,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if(s.length() == 10){
+                if (s.length() == 10) {
                     send_bt.setEnabled(true);
                 }
             }
@@ -84,35 +83,31 @@ public class Login extends AppCompatActivity {
                                        }
                                    }
         );
-
     }
 
 
-    private void saveInfo(){
-        String name= nickname_et.getText().toString();
+    private void saveInfo() {
+        String name = nickname_et.getText().toString();
         String couse = course_et.getText().toString();
         String mobile = mobile_et.getText().toString();
-
-        if(name.isEmpty() ||couse.isEmpty()|| mobile.length() !=10 ){
+        if (name.isEmpty() || couse.isEmpty() || mobile.length() != 10) {
             showError();
-
-        } else{
-            sendverifycode("+91"+mobile);
-
+        } else {
+            sendverifycode("+91" + mobile);
         }
     }
-    private void showError() {
 
+    private void showError() {
         Snackbar snackbar = Snackbar.make(getCurrentFocus(), "Error", Snackbar.LENGTH_LONG);
         View snackBarView = snackbar.getView();
-        snackBarView.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.red,null));
+        snackBarView.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.red, null));
         snackBarView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         snackbar.show();
     }
 
 
     private void verifyCode(String code) {
-        PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(verifyID,code);
+        PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(verifyID, code);
         signinwiithcreditndial(phoneAuthCredential);
     }
 
@@ -121,36 +116,32 @@ public class Login extends AppCompatActivity {
         firebaseAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                String name= nickname_et.getText().toString();
+                String name = nickname_et.getText().toString();
                 String couse = course_et.getText().toString();
                 String mobile = mobile_et.getText().toString();
 
-                if(task.isSuccessful()){
-
+                if (task.isSuccessful()) {
                     String key = databaseReference.push().getKey();
-                    UserInfo userInfo = new UserInfo(name, couse,mobile,firebaseAuth.getUid());
-                    databaseReference.child("+91"+mobile).setValue(userInfo);
+                    UserInfo userInfo = new UserInfo(name, couse, mobile, firebaseAuth.getUid());
+                    databaseReference.child("+91" + mobile).setValue(userInfo);
                     alertDialog.dismiss();
                     Intent intent = new Intent(Login.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
-                    Toast.makeText(Login.this, "Not Success"+ task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-
+                } else {
+                    Toast.makeText(Login.this, "Not Success" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
 
-
     private void sendverifycode(String phone) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phone, 60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallBack
-
-
         );
     }
+
     private AlertDialog alertDialog;
 
     private String verifyID;
@@ -164,8 +155,7 @@ public class Login extends AppCompatActivity {
             alertDialog = new AlertDialog.Builder(
                     Login.this).create();
             // Setting Dialog Title
-            alertDialog.setTitle("Verifying....Please Wait\nDon't Press anything. Freeze!! :D"+ nickname_et.getText().toString());
-
+            alertDialog.setTitle("Verifying....Please Wait\nDon't Press anything. Freeze!! :D" + nickname_et.getText().toString());
             alertDialog.setView(new ProgressBar(Login.this));
             // Showing Alert Message
             alertDialog.show();
@@ -174,7 +164,7 @@ public class Login extends AppCompatActivity {
         @Override
         public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
             String code = phoneAuthCredential.getSmsCode();
-            if(code != null){
+            if (code != null) {
                 verifyCode(code);
             }
         }
