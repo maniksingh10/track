@@ -78,7 +78,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         databaseReference = FirebaseDatabase.getInstance().getReference("BusLocation");
 
 
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
@@ -129,6 +128,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMaxZoomPreference(16.0f);
+
+
         whereis();
         mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
@@ -138,6 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.setTrafficEnabled(true);
                 } else {
                     mMap.setTrafficEnabled(false);
+
                 }
             }
         });
@@ -160,6 +162,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(checkPermission()){
             displayLocationSettingsRequest(this);
             mMap.setMyLocationEnabled(true);
+        }else{
+            Toast.makeText(MapsActivity.this, "Allow Permission and Turn On Location \nto know where you are?", Toast.LENGTH_LONG).show();
         }
 
         mFusedLocationClient.removeLocationUpdates(locationCallback);
@@ -263,13 +267,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     aSwitch.setChecked(false);
+                    displayLocationSettingsRequest(this);
+                    mMap.setMyLocationEnabled(true);
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                 } else {
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapsActivity.this, "Allow Permission and Turn On Location \nto know where you are?", Toast.LENGTH_LONG).show();
+
                     aSwitch.setChecked(false);
                 }
                 return;
