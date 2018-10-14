@@ -1,17 +1,24 @@
 package com.manik.collegebus;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -32,8 +39,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +51,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -63,7 +74,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-
         aSwitch = findViewById(R.id.onoff);
         databaseReference = FirebaseDatabase.getInstance().getReference("BusLocation");
 
@@ -79,7 +89,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -87,11 +96,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                     isUpdateOn = true;
                     startLocation();
-
                 } else {
                     isUpdateOn = false;
                     whereis();
-
                 }
             }
         });
@@ -116,35 +123,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
         };
-
-
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMaxZoomPreference(16.0f);
+        whereis();
+        mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                CameraPosition cameraPosition = mMap.getCameraPosition();
+                if(cameraPosition.zoom > 18.0) {
+                    mMap.setTrafficEnabled(true);
+                } else {
+                    mMap.setTrafficEnabled(false);
+                }
+            }
+        });
+    }
+
 
 
     private void startLocation() {
         if (checkPermission()) {
             displayLocationSettingsRequest(this);
             mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-
         } else {
             checkPermission();
         }
-    }
-
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMaxZoomPreference(16.0f);
-        mMap.setTrafficEnabled(true);
-        whereis();
-
     }
 
     String time;
 
     private void whereis() {
         mFusedLocationClient.removeLocationUpdates(locationCallback);
+        mMap.setMyLocationEnabled(true);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -159,6 +173,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, logi)));
                     mMap.addMarker(new MarkerOptions().position(new LatLng(lat, logi)).title(time).icon(BitmapDescriptorFactory.fromResource(R.drawable.img)));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+                    GoogleMapsPath mapsPath = new GoogleMapsPath(mMap);
                 }
             }
 
@@ -166,7 +181,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
     }
 
 

@@ -32,6 +32,7 @@ public class MessageFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+
     private RecyclerView recyclerView;
     private MessageAdap messageAdap;
     private List<UMessage> messageList = new ArrayList<>();

@@ -39,9 +39,15 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
         firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            finish();
+            startActivity(intent);
+        }
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
         nickname_et = findViewById(R.id.username);
         course_et = findViewById(R.id.course);
         mobile_et = findViewById(R.id.phone);
@@ -167,16 +173,7 @@ public class Login extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if (currentUser == null) {
-            // No user is signed in
 
-        } else {
-            // User logged in
-            Intent intent = new Intent(Login.this, MainActivity.class);
-            finish();
-            startActivity(intent);
-        }
 
     }
 }
