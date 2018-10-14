@@ -1,5 +1,6 @@
 package com.manik.collegebus;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +10,10 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -53,17 +57,41 @@ public class Login extends AppCompatActivity {
         mobile_et = findViewById(R.id.phone);
         send_bt = findViewById(R.id.sendcodebt);
         root= findViewById(R.id.loginact);
+        send_bt.setEnabled(false);
+        mobile_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.length() == 10){
+                    send_bt.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         send_bt.setOnClickListener(new View.OnClickListener() {
                                        @Override
                                        public void onClick(View v) {
+                                           root.clearFocus();
                                            saveInfo();
                                        }
                                    }
         );
 
 
+
+
     }
+
+
     private void saveInfo(){
         String name= nickname_et.getText().toString();
         String couse = course_et.getText().toString();
@@ -136,20 +164,14 @@ public class Login extends AppCompatActivity {
         public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
             super.onCodeSent(s, forceResendingToken);
             verifyID = s;
-            Toast.makeText(Login.this, "Code Sent", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Login.this, "Code Sent to your mobile", Toast.LENGTH_SHORT).show();
             alertDialog = new AlertDialog.Builder(
                     Login.this).create();
-
             // Setting Dialog Title
-            alertDialog.setTitle("Verifying "+ nickname_et.getText().toString());
-
+            alertDialog.setTitle("Verifying....Please Wait"+ nickname_et.getText().toString());
+            alertDialog.setTitle("Don't Press anything. Freeze!!! :D");
             // Setting Dialog Message
             alertDialog.setMessage("");
-
-            // Setting Icon to Dialog
-            alertDialog.setIcon(R.drawable.common_google_signin_btn_icon_dark);
-
-
             // Showing Alert Message
             alertDialog.show();
         }
@@ -165,15 +187,8 @@ public class Login extends AppCompatActivity {
         @Override
         public void onVerificationFailed(FirebaseException e) {
             Toast.makeText(Login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-
         }
     };
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
 
-
-    }
 }

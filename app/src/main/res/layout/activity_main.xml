@@ -69,7 +69,7 @@
                 android:hapticFeedbackEnabled="true"
                 android:src="@drawable/ic_map"
                 android:tooltipText="Track Bus"
-                app:elevation="6dp"
+                app:elevation="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 

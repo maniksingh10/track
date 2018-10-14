@@ -5,7 +5,96 @@
       <map>
         <entry key="imageWizard">
           <value>
-            <PersistentState />
+            <PersistentState>
+              <option name="children">
+                <map>
+                  <entry key="imageAssetPanel">
+                    <value>
+                      <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="launcher">
+                              <value>
+                                <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="backgroundImage">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="scalingPercent" value="0" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                      <entry key="foregroundImage">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="scalingPercent" value="67" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="foregroundImage" value="C:\Users\Manik\Downloads\icons8-bus-96.png" />
+                                      <entry key="legacyIconShape" value="NONE" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                            <entry key="launcherLegacy">
+                              <value>
+                                <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="image">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="paddingPercent" value="5" />
+                                                <entry key="trimmed" value="true" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="dogEared" value="true" />
+                                      <entry key="iconShape" value="NONE" />
+                                      <entry key="imageAsset" value="C:\Users\Manik\Downloads\icons8-bus-80.png" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
+                          </map>
+                        </option>
+                      </PersistentState>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </PersistentState>
           </value>
         </entry>
         <entry key="vectorWizard">

@@ -14,7 +14,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginBottom="8dp"
         android:padding="8dp"
-        android:text="Anonymous Chat which you can use to contact others in case you are late. And the chat window will be cleared everday day. \n(Do not use this as WhatsApp)\n\nThis app was made so that you don't have to worry about bus anymore. \n \nApp will be functional from 6:30AM to 9:30AM. \n\n For feedback or anything you don't like in the app or any random talk. Contact me . I will appreciate it. \n\n  "
+        android:text="Anonymous Chat which you can use to contact others in case you are late. And the chat window will be cleared everday day. \n(Do not use this as WhatsApp)\n\n\nThis app was made so that you don't have to worry about bus anymore.\n\n\nApp will be functional from 6:30AM to 9:30AM.\n\n\n For feedback or anything you don't like in the app or any random talk. Contact me. I will appreciate it."
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -54,7 +54,7 @@ public class MessageFragment extends Fragment {
         messageAdap = new MessageAdap(getContext(),messageList);
         recyclerView.setAdapter(messageAdap);
         firebaseAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference("messages");
+        databaseReference = FirebaseDatabase.getInstance().getReference("messagess");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

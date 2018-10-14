@@ -39,6 +39,7 @@
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textCapWords"
             android:focusableInTouchMode="true"
             android:maxLength="10" />
     </android.support.design.widget.TextInputLayout>
@@ -60,6 +61,7 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
             android:hint="Course"
+            android:inputType="textCapWords"
             android:maxLength="20" />
     </android.support.design.widget.TextInputLayout>
 

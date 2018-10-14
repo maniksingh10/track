@@ -77,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         aSwitch = findViewById(R.id.onoff);
         databaseReference = FirebaseDatabase.getInstance().getReference("BusLocation");
 
-        checkPermission();
+
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         locationRequest = new LocationRequest();
@@ -134,7 +134,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onCameraMove() {
                 CameraPosition cameraPosition = mMap.getCameraPosition();
-                if(cameraPosition.zoom > 18.0) {
+                if(cameraPosition.zoom > 15.0) {
                     mMap.setTrafficEnabled(true);
                 } else {
                     mMap.setTrafficEnabled(false);
@@ -150,15 +150,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             displayLocationSettingsRequest(this);
             mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
         } else {
-            checkPermission();
+            Toast.makeText(this,"Enable Location",Toast.LENGTH_SHORT).show();
         }
     }
 
     String time;
 
     private void whereis() {
+        if(checkPermission()){
+            displayLocationSettingsRequest(this);
+            mMap.setMyLocationEnabled(true);
+        }
+
         mFusedLocationClient.removeLocationUpdates(locationCallback);
-        mMap.setMyLocationEnabled(true);
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -213,10 +218,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             // Show the dialog by calling startResolutionForResult(), and check the result
                             // in onActivityResult().
                             status.startResolutionForResult(MapsActivity.this, REQUEST_CHECK_SETTINGS);
+                            Toast.makeText(MapsActivity.this, "Turn On Location to see where are you", Toast.LENGTH_LONG).show();
+
                         } catch (IntentSender.SendIntentException e) {
                             Log.i(TAG, "PendingIntent unable to execute request.");
                         }
-                        aSwitch.setChecked(false);
+                         aSwitch.setChecked(false);
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                         Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
@@ -256,7 +263,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     aSwitch.setChecked(false);
-                    displayLocationSettingsRequest(this);
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                 } else {
