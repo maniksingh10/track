@@ -1,20 +1,18 @@
 package com.manik.collegebus;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.concurrent.TimeUnit;
 
 public class Login extends AppCompatActivity {
+
 
     private Button send_bt;
     private TextInputEditText nickname_et, course_et, mobile_et;
@@ -85,9 +84,6 @@ public class Login extends AppCompatActivity {
                                        }
                                    }
         );
-
-
-
 
     }
 
@@ -168,10 +164,9 @@ public class Login extends AppCompatActivity {
             alertDialog = new AlertDialog.Builder(
                     Login.this).create();
             // Setting Dialog Title
-            alertDialog.setTitle("Verifying....Please Wait"+ nickname_et.getText().toString());
-            alertDialog.setTitle("Don't Press anything. Freeze!!! :D");
-            // Setting Dialog Message
-            alertDialog.setMessage("");
+            alertDialog.setTitle("Verifying....Please Wait\nDon't Press anything. Freeze!! :D"+ nickname_et.getText().toString());
+
+            alertDialog.setView(new ProgressBar(Login.this));
             // Showing Alert Message
             alertDialog.show();
         }

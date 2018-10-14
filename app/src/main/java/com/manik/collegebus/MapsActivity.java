@@ -1,35 +1,21 @@
 package com.manik.collegebus;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.inputmethod.EditorInfo;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
@@ -42,18 +28,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -61,12 +40,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private DatabaseReference databaseReference;
     private double lat, logi;
-    private Switch aSwitch;
+
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
 
-    private FusedLocationProviderClient mFusedLocationClient;
-    private LocationRequest locationRequest;
-    private LocationCallback locationCallback;
+
     private boolean isUpdateOn = false;
 
     @Override
@@ -74,100 +51,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        aSwitch = findViewById(R.id.onoff);
         databaseReference = FirebaseDatabase.getInstance().getReference("BusLocation");
-
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(5000);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                    isUpdateOn = true;
-                    startLocation();
-                } else {
-                    isUpdateOn = false;
-                    whereis();
-                }
-            }
-        });
 
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        String currentDate = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss aa", Locale.getDefault()).format(new Date());
-
-                        String key = databaseReference.push().getKey();
-                        ULocation uLocation = new ULocation(location.getLatitude(), location.getLongitude(), currentDate);
-                        databaseReference.child("locate").setValue(uLocation);
-                        mMap.clear();
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("Time was " + convertDate(location.getTime(), "dd/MM/yyyy hh:mm:ss")).icon(BitmapDescriptorFactory.fromResource(R.drawable.img)));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-                        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
-                    }
-                }
-            }
-
-        };
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMaxZoomPreference(16.0f);
-
-
         whereis();
         mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
             public void onCameraMove() {
                 CameraPosition cameraPosition = mMap.getCameraPosition();
-                if(cameraPosition.zoom > 15.0) {
+                if (cameraPosition.zoom > 15.0) {
                     mMap.setTrafficEnabled(true);
                 } else {
                     mMap.setTrafficEnabled(false);
-
                 }
             }
         });
     }
 
 
-
-    private void startLocation() {
-        if (checkPermission()) {
-            displayLocationSettingsRequest(this);
-            mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-        } else {
-            Toast.makeText(this,"Enable Location",Toast.LENGTH_SHORT).show();
-        }
-    }
-
     String time;
 
     private void whereis() {
-        if(checkPermission()){
-            displayLocationSettingsRequest(this);
+        if (checkPermission()) {
             mMap.setMyLocationEnabled(true);
-        }else{
+            displayLocationSettingsRequest(this);
+        } else {
             Toast.makeText(MapsActivity.this, "Allow Permission and Turn On Location \nto know where you are?", Toast.LENGTH_LONG).show();
         }
-
-        mFusedLocationClient.removeLocationUpdates(locationCallback);
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -177,13 +98,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     logi = location.getLongi();
                     time = location.getUsername();
                 }
-                if (!isUpdateOn) {
-                    mMap.clear();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, logi)));
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(lat, logi)).title(time).icon(BitmapDescriptorFactory.fromResource(R.drawable.img)));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
-                    GoogleMapsPath mapsPath = new GoogleMapsPath(mMap);
-                }
+                mMap.clear();
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, logi)));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(lat, logi)).title(time).icon(BitmapDescriptorFactory.fromResource(R.drawable.img)));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+                GoogleMapsPath mapsPath = new GoogleMapsPath(mMap);
             }
 
             @Override
@@ -192,16 +111,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-
-    public String convertDate(long dateInMilliseconds, String dateFormat) {
-        return String.valueOf(DateFormat.format(dateFormat, dateInMilliseconds));
-    }
-
-
     private void displayLocationSettingsRequest(Context context) {
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API).build();
         googleApiClient.connect();
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(10000 / 2);
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);
@@ -222,16 +140,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             // Show the dialog by calling startResolutionForResult(), and check the result
                             // in onActivityResult().
                             status.startResolutionForResult(MapsActivity.this, REQUEST_CHECK_SETTINGS);
-                            Toast.makeText(MapsActivity.this, "Turn On Location to see where are you", Toast.LENGTH_LONG).show();
-
                         } catch (IntentSender.SendIntentException e) {
                             Log.i(TAG, "PendingIntent unable to execute request.");
                         }
-                         aSwitch.setChecked(false);
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                         Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
-                        aSwitch.setChecked(false);
                         break;
                 }
             }
@@ -266,9 +180,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    aSwitch.setChecked(false);
-                    displayLocationSettingsRequest(this);
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
                     mMap.setMyLocationEnabled(true);
+                    displayLocationSettingsRequest(this);
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                 } else {
@@ -277,7 +200,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // functionality that depends on this permission.
                     Toast.makeText(MapsActivity.this, "Allow Permission and Turn On Location \nto know where you are?", Toast.LENGTH_LONG).show();
 
-                    aSwitch.setChecked(false);
                 }
                 return;
             }

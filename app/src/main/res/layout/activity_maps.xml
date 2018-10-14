@@ -15,25 +15,13 @@
         android:layout_height="0dp"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="8dp"
-        android:layout_weight="1"
-        map:layout_constraintBottom_toTopOf="@+id/onoff"
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintBaseline_toBaselineOf="parent"
         tools:context=".MapsActivity" />
 
-    <Switch
-        android:id="@+id/onoff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:paddingTop="8dp"
-        android:switchPadding="16dp"
-        android:text="InBus"
-        android:textColor="#fff"
-        map:layout_constraintBottom_toBottomOf="parent"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintStart_toStartOf="parent" />
+
 
 
 </android.support.constraint.ConstraintLayout>
