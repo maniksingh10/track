@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,7 +63,6 @@ public class MessageFragment extends Fragment {
                     messageList.add(uMessage);
                 }
 
-//                messageAdap.notifyDataSetChanged();
                 messageAdap.notifyDataSetChanged();
                 recyclerView.scrollToPosition(messageAdap.getItemCount()-1);
 
